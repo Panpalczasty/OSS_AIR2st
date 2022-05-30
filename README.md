@@ -116,3 +116,9 @@ Wykresy:
 
 ## 4. Wnioski, przemyślenia (opcjonalne, Bania nie Iwonka)
 
+Szkoda że gify się w pdfach nie animują XD, ładnie śmiga
+
+*TODO - trackline na gifie?*
+
+![Tu robot powinien robić kwadrat](MPC/gifs/-0.01_-2.36_to_-0.00_-2.36.gif)
+
