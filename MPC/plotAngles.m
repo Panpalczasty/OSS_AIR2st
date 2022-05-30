@@ -1,5 +1,5 @@
 %plot angles in time domain
-function res = plotAngles(id, tout, xout, uout, ps)
+function res = plotAngles(id, tout, xout, uout, ps, fname)
 
     f = figure(id);
     f.Position = [600 0 1000 900];
@@ -49,7 +49,14 @@ function res = plotAngles(id, tout, xout, uout, ps)
     x02 = ps.x0(2);
     xf1 = ps.xf(1);
     xf2 = ps.xf(2);
-    filename = sprintf("plots/state/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
+
+
+    if nargin > 5
+        filename = sprintf("plots/state/%s.png",fname);
+    else
+        filename = sprintf("plots/state/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
+    end
+   
     saveas(id,filename);
 
     res = 0;

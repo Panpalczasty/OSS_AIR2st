@@ -5,10 +5,10 @@ function [uout,Qstat] = fminconGrad(ps)
     
     options = optimoptions('fmincon');
     options.SpecifyObjectiveGradient = true;
-    options.MaxFunctionEvaluations = 1e5;
+    options.MaxFunctionEvaluations = 1e3;
     options.Display = 'off';
-    options.OptimalityTolerance = eps;
-    options.StepTolerance = eps;
+    options.OptimalityTolerance = 1e-4;
+    options.StepTolerance = 1e-7;
     options.Algorithm = 'interior-point';
 
     uopt = fmincon(Q,ps.u,ps.A,ps.b,[],[],[],[],[],options);

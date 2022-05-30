@@ -19,20 +19,23 @@ close all
 mode = "MPC";
 %mode = "std";
 
-horizon = 5;
+curve = "circle";
+horizon = 1;
 step = .1;
-time = 20;
+time = 8;
 sampling_freq = 10;
 center = [0 -1];
-radius = 0.5;
+radius = 0.2;
 R = 1e-2;
 Wx = 1e1;
 Wv = 1e-1;
 Wstat = 1e2;
 
+tname = sprintf("%s_T%d_h%d_s%.1f_%s_R%.2f", mode, time, horizon, step, curve, radius);
+
 %% get model parameters
 params = getDefaultParams(time,sampling_freq);
-[~, params] = getTrajectory('circle', params, center, radius);
+[~, params] = getTrajectory(curve, params, center, radius);
 params = getWeights(params,R,Wx,Wv,Wstat);
 
 %% optimize
@@ -45,12 +48,14 @@ end
 [uopt, ~] = MPC(params, horizon, step);
 [x,t,p,hu,pos] = getStats(params, uopt);
 
+[u_qa, e_qa, pos_qa] = getQA(uopt, x, params.xref, params)
+
 %% plot
 
-plotError(1, t, x, params.xref, params);
-%plotAdjoint(1,t,p,params);
-plotAngles(2,t,x,uopt,params);
-%plotPos(3, pos, params.posref, params);
-plotSwitch(5,t,uopt,hu,params);
+plotError(1, t, x, params.xref, params, tname);
+%plotAdjoint(1,t,p,params, tname);
+plotAngles(2,t,x,uopt,params, tname);
+plotPos(3, pos, params.posref, params, tname);
+plotSwitch(5,t,uopt,hu,params, tname);
 
-animate(6,pos, params);
+animate(6,pos, params, tname);

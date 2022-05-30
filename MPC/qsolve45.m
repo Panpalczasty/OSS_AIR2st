@@ -24,10 +24,11 @@ function [t,x] = qsolve45(u, tf, p)
     
     %solve 
     for i = 1:Nt
+        xrh = 0.5*(p.xref(i,:) + p.xref(i+1,:));
         dx1 = qmodel(xtmp, u(i,:), p.J1, p.J2, p.xref(i,:), p.W, p.R);   tmp = xtmp+h/2*dx1; tt = tt+h/2;
-        dx2 = qmodel(tmp, u(i,:), p.J1, p.J2, p.xref(i,:), p.W, p.R);    tmp = xtmp+h/2*dx2; 
-        dx3 = qmodel(tmp, u(i,:), p.J1, p.J2, p.xref(i,:), p.W, p.R);    tmp = xtmp+h*dx3;   tt = tt+h/2;
-        dx4 = qmodel(tmp, u(i,:), p.J1, p.J2, p.xref(i,:), p.W, p.R);
+        dx2 = qmodel(tmp, u(i,:), p.J1, p.J2, xrh, p.W, p.R);    tmp = xtmp+h/2*dx2; 
+        dx3 = qmodel(tmp, u(i,:), p.J1, p.J2, xrh, p.W, p.R);    tmp = xtmp+h*dx3;   tt = tt+h/2;
+        dx4 = qmodel(tmp, u(i,:), p.J1, p.J2, p.xref(i+1,:), p.W, p.R);
 
         xtmp = xtmp + h/6*(dx1 + 2*dx2 + 2*dx3 + dx4);
 

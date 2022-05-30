@@ -16,23 +16,24 @@ close all
 % and final position deviation
 
 %% setup
-%mode = "MPC";
+mode = "MPC";
 mode = "std";
 
-horizon = 2;
-step = 0.2;
-time = 30;
+horizon = 5;
+step = .1;
+time = 20;
 sampling_freq = 10;
 center = [0 -1];
 radius = 0.5;
 R = 1e-2;
-W = 1;
+Wx = 1e1;
+Wv = 1e-1;
 Wstat = 1e2;
 
 %% get model parameters
 params = getDefaultParams(time,sampling_freq);
-[~, params] = getTrajectory('s', params, center, radius);
-params = getWeights(params,R,Wpos,Wv,Wstat);
+[~, params] = getTrajectory('circle', params, center, radius);
+params = getWeights(params,R,Wx,Wv,Wstat);
 
 %% optimize
 

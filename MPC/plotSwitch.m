@@ -6,7 +6,7 @@
 %   uout - input to system (as array)
 %   Huout - switch function (as array)
 %   ps - model & system parameter struct
-function res = plotSwitch(id, tout, uout, Huout, ps)
+function res = plotSwitch(id, tout, uout, Huout, ps, fname)
     
     uout = [uout; uout(end,:)];
     f = figure(id);
@@ -40,7 +40,13 @@ function res = plotSwitch(id, tout, uout, Huout, ps)
     x02 = ps.x0(2);
     xf1 = ps.xf(1);
     xf2 = ps.xf(2);
-    filename = sprintf("plots/switch/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
+    
+    if nargin > 5
+        filename = sprintf("plots/switch/%s.png",fname);
+    else
+        filename = sprintf("plots/switch/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
+    end
+    
     saveas(id,filename);
  
     res = 0;

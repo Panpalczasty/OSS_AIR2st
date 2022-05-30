@@ -4,7 +4,7 @@
 %   id - id of figure
 %   pos - position of robot (as array)
 %   ps - sim & model parameter struct
-function res = animate(id, pos, ps)
+function res = animate(id, pos, ps, fname)
 
     N = length(pos(:,1));
     figure(id);
@@ -27,7 +27,11 @@ function res = animate(id, pos, ps)
     xf1 = ps.xf(1);
     xf2 = ps.xf(2);
 
-    filename = sprintf("gifs/%.2f_%.2f_to_%.2f_%.2f.gif", x01, x02, xf1, xf2);
+    if nargin > 3
+        filename = sprintf("gifs/%s.gif",fname);
+    else
+        filename = sprintf("gifs/%.2f_%.2f_to_%.2f_%.2f.gif", x01, x02, xf1, xf2);
+    end
 
     for i = 1:1:N
         trackline.XData = pos(1:i,1);

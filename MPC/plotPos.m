@@ -1,6 +1,6 @@
 
 %plot trajectory in 2D plane
-function res = plotPos(id, pos, posref, ps)
+function res = plotPos(id, pos, posref, ps, fname)
     
     f = figure(id);
     f.Position = [0 600 600 400];
@@ -22,7 +22,13 @@ function res = plotPos(id, pos, posref, ps)
     x02 = ps.x0(2);
     xf1 = ps.xf(1);
     xf2 = ps.xf(2);
-    filename = sprintf("plots/pos/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
+    
+    if nargin > 4
+        filename = sprintf("plots/pos/%s.png",fname);
+    else
+        filename = sprintf("plots/pos/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
+    end
+    
     %saveas(id,filename);
 
     res = 0;

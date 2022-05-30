@@ -1,5 +1,5 @@
 %plot time travel parameters
-function res = plotAdjoint(id, tout, pout, ps)
+function res = plotAdjoint(id, tout, pout, ps, fname)
     
     f = figure(id);
     f.Position = [600 0 1000 600];
@@ -30,7 +30,13 @@ function res = plotAdjoint(id, tout, pout, ps)
     x02 = ps.x0(2);
     xf1 = ps.xf(1);
     xf2 = ps.xf(2);
-    filename = sprintf("plots/adj/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
+
+    if nargin > 4
+        filename = sprintf("plots/adj/%s.png",fname);
+    else
+        filename = sprintf("plots/adj/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
+    end
+    
     saveas(id,filename);
 
     res = 0;

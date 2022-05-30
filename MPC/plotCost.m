@@ -1,5 +1,5 @@
 %plot cost
-function res = plotCost(id, Qstat, ps)
+function res = plotCost(id, Qstat, ps, fname)
     
     f = figure(id);
     f.Position = [0 0 600 400];
@@ -14,8 +14,12 @@ function res = plotCost(id, Qstat, ps)
     x02 = ps.x0(2);
     xf1 = ps.xf(1);
     xf2 = ps.xf(2);
-    filename = sprintf("plots/cost/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
+    if nargin > 3
+        filename = sprintf("plots/cost/%s.png",fname);
+    else
+        filename = sprintf("plots/cost/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
+    end
     saveas(id,filename);
- 
+    
     res = 0;
 end

@@ -46,8 +46,8 @@ switch mode
         pos(sf*T/2+1:end,2) = center(2) - radius + 4*radius*t(1:sf*T/2)/T;
 
     case 'wobble'
-        pos(:,1) = center(1) + radius*cos(w*t) + radius/10*cos(10*w*t);
-        pos(:,2) = center(2) + radius*sin(w*t) + radius/10*sin(10*w*t);
+        pos(:,1) = center(1) + radius*cos(w*t).*(1 + 0.1*sin(10*w*t));
+        pos(:,2) = center(2) + radius*sin(w*t).*(1 + 0.1*sin(10*w*t));
 
     case 'chirp'
         pos(:,1) = center(1) + radius*cos(10*w*t.^2/T);
