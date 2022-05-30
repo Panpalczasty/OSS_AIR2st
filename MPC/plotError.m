@@ -2,6 +2,7 @@ function fig = plotError(i, t, x, xref, ps, fname)
     
     err = abs(x(:,1:4)-xref);
     fig = figure(i);
+    fig.Position = [0 0 500 500];
     
     % plot angular position error
     subplot(3,1,1);

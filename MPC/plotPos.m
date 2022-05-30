@@ -3,7 +3,7 @@
 function res = plotPos(id, pos, posref, ps, fname)
     
     f = figure(id);
-    f.Position = [0 600 600 400];
+    f.Position = [0 0 500 500];
 
 
     plot(posref(:,1), posref(:,2),"b--");

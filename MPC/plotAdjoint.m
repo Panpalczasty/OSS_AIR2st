@@ -2,7 +2,7 @@
 function res = plotAdjoint(id, tout, pout, ps, fname)
     
     f = figure(id);
-    f.Position = [600 0 1000 600];
+    f.Position = [0 0 500 500];
 
     %plot position adjoints
     subplot(2,1,1);

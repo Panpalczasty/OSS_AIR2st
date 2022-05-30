@@ -7,7 +7,9 @@
 function res = animate(id, pos, ps, fname)
 
     N = length(pos(:,1));
-    figure(id);
+    f = figure(id);
+    f.Position = [0 0 800 800];
+    
     grid();
     hold on;
     plot(0,0,"k*",'LineWidth',3);

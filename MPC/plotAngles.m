@@ -2,7 +2,7 @@
 function res = plotAngles(id, tout, xout, uout, ps, fname)
 
     f = figure(id);
-    f.Position = [600 0 1000 900];
+    f.Position = [0 0 1000 500];
     uout = [uout; uout(end,:)];
 
     %plot joint values

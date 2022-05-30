@@ -16,22 +16,28 @@ close all
 % and final position deviation
 
 %% setup
-mode = "MPC";
-%mode = "std";
+%mode = "MPC";
+mode = "std";
 
-curve = "circle";
+curve = "wobble";
 horizon = 1;
 step = .1;
-time = 8;
+time = 40;
 sampling_freq = 10;
 center = [0 -1];
-radius = 0.2;
+radius = 0.1;
 R = 1e-2;
 Wx = 1e1;
 Wv = 1e-1;
 Wstat = 1e2;
 
+if mode=="std"
+    horizon = time;
+    step = time;
+end
+
 tname = sprintf("%s_T%d_h%d_s%.1f_%s_R%.2f", mode, time, horizon, step, curve, radius);
+
 
 %% get model parameters
 params = getDefaultParams(time,sampling_freq);
@@ -39,11 +45,6 @@ params = getDefaultParams(time,sampling_freq);
 params = getWeights(params,R,Wx,Wv,Wstat);
 
 %% optimize
-
-if mode=="std"
-    horizon = params.T;
-    step = params.T;
-end
 
 [uopt, ~] = MPC(params, horizon, step);
 [x,t,p,hu,pos] = getStats(params, uopt);
@@ -53,7 +54,7 @@ end
 %% plot
 
 plotError(1, t, x, params.xref, params, tname);
-%plotAdjoint(1,t,p,params, tname);
+plotAdjoint(1,t,p,params, tname);
 plotAngles(2,t,x,uopt,params, tname);
 plotPos(3, pos, params.posref, params, tname);
 plotSwitch(5,t,uopt,hu,params, tname);

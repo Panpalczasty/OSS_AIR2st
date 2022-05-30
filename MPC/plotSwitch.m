@@ -10,7 +10,7 @@ function res = plotSwitch(id, tout, uout, Huout, ps, fname)
     
     uout = [uout; uout(end,:)];
     f = figure(id);
-    f.Position = [0 0 600 400];
+    f.Position = [0 0 500 500];
 
     subplot(2,1,1);
     plot(tout, uout(:,1),"b-", "LineWidth", 1.5);
