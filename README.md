@@ -120,5 +120,5 @@ Szkoda że gify się w pdfach nie animują XD, ładnie śmiga
 
 *TODO - trackline na gifie?*
 
-![Tu robot powinien robić kwadrat](MPC/gifs/-0.01_-2.36_to_-0.00_-2.36.gif)
+![Tu robot powinien robić kwadrat](MPC/gifs/-1.58_-0.76_to_-1.57_-0.79.gif)
 
