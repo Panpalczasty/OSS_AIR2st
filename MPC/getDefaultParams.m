@@ -1,6 +1,8 @@
 %declare modelfunction [t, x] = inverseKin(pos, T, config, J1, J2)
-function params = getDefaultParams(params)
-
+function params = getDefaultParams(T, sfreq)
+    
+    params.T = T;
+    params.sfreq = sfreq;
     %define params for joints
     
     %Define joint 1
@@ -38,22 +40,22 @@ function params = getDefaultParams(params)
                                   'above', ...
                                   params.J1, ...
                                   params.J2 ...
-    )
+    );
 
     %initial and final state
     params.x0 = params.xref(1, :);
     params.xf = params.xref(end, :);
 
-    %initial input - const
+    %initial input - const 0 
     params.u = zeros(params.T*params.sfreq*2,1);
    
     %get constraints
     [params.A, params.b] = getDefaultConstraints(params); 
     
     %weights
-    W = [1e3; 1e3; 0; 0];
+    W = [1; 1; 1; 1];
     params.W = eye(length(params.x0)).*W;
-    params.Wstat = eye(length(params.x0))*1e5;
-    params.R = 1;
+    params.Wstat = eye(length(params.x0))*1e2;
+    params.R = 1e-2;
 
 end

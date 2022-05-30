@@ -2,11 +2,11 @@ clc
 clear all
 close all
 
-%% Desc
+%% Description
 
 % 29.05.22
-% TODO - MPC wrapper for solver
-% TODO - 
+% MPC wrapper for solver
+% Cleanup and preparation for 
 
 % 01.05.22
 % This file implements optimization for changes in input value
@@ -16,74 +16,41 @@ close all
 % and final position deviation
 
 %% setup
+mode = "MPC";
+%mode = "std";
 
-% Define sampling & final simulation time
-params.sfreq = 10;
-params.T = 60;
-params = getDefaultParams(params);
-
-% Weight manipulation
-W = 1*[1; 1; 1; 1];
-Wstat = 1e2*[1; 1; 1; 1];
-params.R = 1e-2;
-
-% update params with appropriate horizon
-% horizon = 10;
-% step = 1;
-
-% uncomment to reduce to last task
-horizon = params.T;
-step = params.T;
+horizon = 5;
+step = .1;
+time = 20;
+sampling_freq = 10;
+center = [0 -1];
+radius = 0.5;
+R = 1e-2;
+Wx = 1e1;
+Wv = 1e-1;
+Wstat = 1e2;
 
 %% get model parameters
-
-params.W = eye(length(params.x0)).*W;
-params.Wstat = eye(length(params.x0)).*Wstat;
-
-% exponential accel
-% pos(:,1) = ones(length(t),1);
-% pos(:,2) = -1+0.1*exp(3*t/T);
-
-pos =getMPCTrajectory('wobble', params.sfreq, params.T, [1 0], 0.3);
-params.posref = pos;
-[params.t,params.xref] = inverseKin(pos, params.T, "below", params.J1, params.J2);
-
-params.x0 = [params.xref(1,1:2) 0 0 0];
-params.xf = [params.xref(end,1:2) 0 0];
-params.xref = [params.xref; params.xf];
-%params.x0 = [params.xref(1,:) 0];
-%params.xf = params.xref(end,:);
+params = getDefaultParams(time,sampling_freq);
+[~, params] = getTrajectory('circle', params, center, radius);
+params = getWeights(params,R,Wx,Wv,Wstat);
 
 %% optimize
 
+if mode=="std"
+    horizon = params.T;
+    step = params.T;
+end
+
 [uopt, ~] = MPC(params, horizon, step);
+[x,t,p,hu,pos] = getStats(params, uopt);
 
+%% plot
 
-%% get stats
-
-% disp(costFun(params,uopt))
- 
-% solve with optimized control 
-[t, x] = qsolve45(uopt, params.T, params);
-
-% antisolve with optimized control
-pf =  - (params.Wstat)*(x(end,1:end-1) - params.xf)';
-pf = [pf;0;0];
-p = qantisolve45(pf, t, x, uopt, params);
-
-pos = simpleKin(x, params.J1, params.J2);
-Hu = getHuvec(t, x, p, uopt, params);
-
-%% checc gradient
-
-%checkGradient(uopt ,params, 0.001);
-% is ok
-
-%% plots, plots, plots
-
-plotAdjoint(1,t,p,params);
+plotError(1, t, x, params.xref, params);
+%plotAdjoint(1,t,p,params);
 plotAngles(2,t,x,uopt,params);
-plotPos(3, pos, params.posref, params);
-plotSwitch(5,t,uopt,Hu,params);
+%plotPos(3, pos, params.posref, params);
+plotSwitch(5,t,uopt,hu,params);
 
 animate(6,pos, params);

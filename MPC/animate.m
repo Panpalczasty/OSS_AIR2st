@@ -15,7 +15,8 @@ function res = animate(id, pos, ps)
     j2plot = plot([pos(1,3) pos(1,1)],[pos(1,4) pos(1,2)], 'k*-', 'LineWidth',3);
     j1plot = plot([0 pos(1,3)],[0 pos(1,4)],'k','LineWidth',3);
     axis([-2 2 -2 2]);
-    
+    daspect([1 1 1]);
+
     xlabel("X [m]");
     ylabel("Y [m]");
     title("Robot Animation")
