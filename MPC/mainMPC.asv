@@ -19,13 +19,13 @@ close all
 
 % Define sampling & final simulation time
 params.sfreq = 10;
-params.T = 26;
+params.T = 30;
 params = getDefaultParams(params);
 
 % Weight manipulation
 W = 1*[1; 1; 1; 1]*1;
 Wstat = 1e2*[1; 1; 1; 1];
-params.R = 1e-2;
+params.R = 1;
 
 % update params with appropriate horizon
 horizon = 1;
@@ -39,21 +39,20 @@ w = 2*pi/T;
 
 sf = params.sfreq;
 pos = zeros(length(t),2);
-p0 = ones(length(t)/4,1);
 
-% % square
-pos(1:sf*T/4,1) = 0.5 + 4*t(1:sf*T/4)/T;
-pos(1:sf*T/4,2) = -0.5;
-pos(sf*T/4+1:sf*T/2,1) = 1.5;
-pos(sf*T/4+1:sf*T/2,2) = -0.5 + 4*t(1:sf*T/4)/T;
-pos(sf*T/2+1:3*sf*T/4,1) = 1.5 - 4*t(1:sf*T/4)/T;
-pos(sf*T/2+1:3*sf*T/4,2) = 0.5;
-pos(3*sf*T/4+1:end,1) = 0.5;
-pos(3*sf*T/4+1:end,2) = 0.5 - 4*t(1:sf*T/4)/T;
+% square
+pos(1:sf*T/4,1) = 0.5 + t/T;
+pos(1:sf*T/4,2) = -0.;
+pos(sf*T/4+1:sf*T/2,1) = -0.3 + 0.3*cos(w*t(1:sf*T/2));
+pos(sf*T/4+1:sf*T/2,2) = 1-0.3*sin(w*t(1:sf*T/2));
+pos(sf*T/2+1:3*sf*T/4,1) = 0.3 + 0.3*cos(w*t(1:sf*T/2));
+pos(sf*T/2+1:3*sf*T/4,2) = 1+0.3*sin(w*t(1:sf*T/2));
+pos(3*sf*T/4+1:end,1) = 0.3 + 0.3*cos(w*t(1:sf*T/2));
+pos(3*sf*T/4+1:end,2) = 1+0.3*sin(w*t(1:sf*T/2));
 
 % circle
-%pos(:,1) = 1 + 0.5*cos(w*t);
-%pos(:,2) = 0.5 * sin(w*t);
+% pos(:,1) = 1 + 0.5*cos(w*t);
+% pos(:,2) = 0.5 * sin(w*t);
 
 % S shaped curve
 %pos(1:sf*T/2,1) = 0.3 + 0.3*cos(w*t(1:sf*T/2));
