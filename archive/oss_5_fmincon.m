@@ -1,5 +1,5 @@
 clc
-clear all
+%clear all
 close all
 
 %% Desc
@@ -13,25 +13,32 @@ close all
 %% get model parameters
 %no switch times, only levels here
 %Default sampling frequency
-params.sfreq = 100;
+params.sfreq = 10;
 params.T = 3;
 
 params = getDefaultParams(params);
 
 %Weight manipulation
-W = 0*1e2*[1; 1; 0; 0];
-Wstat = 1e4*[1; 1; 1; 1];
+W = 1*[1; 1; 1; 1]*0;
+Wstat = 1e2*[1; 1; 1; 1];
 
 params.W = eye(length(params.x0)).*W;
 params.Wstat = eye(length(params.x0)).*Wstat;
-params.R = 100;
+params.R = 1e-2;
 
 T = params.T;
 %Define trajectory here - as x = f(t), y = g(t)
 t = linspace(0, params.T, params.T*params.sfreq);
 w = 2*pi/T;
-pos(:,1) = 0.3*t/T+0.4;
-pos(:,2) = zeros(length(t),1); 
+
+pos = zeros(length(t),2);
+pos(:,1) = 0.7 + 0.5 * t/t;
+pos(:,2) = 0.5 * t/T;
+
+%pos(:,1) = 0.3*t/T+0.4;
+%pos(:,2) = 0.3*t/T+0.4;
+%pos(:,2) = zeros(length(t),1); 
+
 params.posref = pos;
 
 [params.t,params.xref] = inverseKin(pos, params.T, "below", params.J1, params.J2);
@@ -39,12 +46,14 @@ params.x0 = [params.xref(1,1:2) 0 0 0];
 params.xf = [params.xref(end,1:2) 0 0];
 %params.x0 = [params.xref(1,:) 0];
 %params.xf = params.xref(end,:);
+
+%params.u = uopt;
 params.u = zeros((length(t)),2);
 
 
 %% optimizers - pick one
 
-alpha = 1e-3;
+alpha = 5e-2;
 iter = 2500;
 
 %[uopt, Qstat] = simpleGrad(params, alpha, iter);
@@ -86,7 +95,7 @@ animate(6,pos, params);
 
 %SCARA 2axis robot model
 %with additional state eq - for cost function
-%dx5 = (x - xref)'*Q*(x - xref)
+%dx5 = (x - xref)'*W*(x - xref)
 function dx = qmodel(x, u, J1, J2, xref, W, R)
     x = x(:);
     %calculate additional params 
@@ -139,7 +148,7 @@ function dx = qmodel(x, u, J1, J2, xref, W, R)
 end
 
 %Adjoint equations for SCARA
-%addl adj variable
+%addl adj variables
 function dp = qantimodel(x, u, p, J1, J2, xref, W, R)
 
     %Steiner reduced masses
@@ -421,8 +430,8 @@ function g = getGrad(u, ps)
     for i = 1: nu
         %hamiltionian simple gradient
         %g(i,:) = getHu(t,p,x,u,ps.J1,ps.J2,ps.R)/ps.sfreq;
-        g(i,1) =  p(i+1,5) - p(i,5);
-        g(i,2) =  p(i+1,6) - p(i,6);
+        g(i,1) = p(i+1,5) - p(i,5);
+        g(i,2) = p(i+1,6) - p(i,6);
     end
  end
 
@@ -669,6 +678,9 @@ function [t, x] = inverseKin(pos, T, config, J1, J2)
         x3 = [diff(x1)*sfreq; 0];
         x4 = [diff(x2)*sfreq; 0];    
     
+        x3(end) = x3(end-1);
+        x4(end) = x4(end-1);
+
         x = [x1 x2 x3 x4];
     end
 end
@@ -680,7 +692,7 @@ function [uout,Qstat] = fminconGrad(ps)
     
     options = optimoptions('fmincon');
     options.SpecifyObjectiveGradient = true;
-    options.MaxFunctionEvaluations = 1e4
+    options.MaxFunctionEvaluations = 1e4;
     options.Display = 'iter';
     options.OptimalityTolerance = eps;
     options.StepTolerance = eps;
@@ -820,6 +832,8 @@ function res = plotAngles(id, tout, xout, uout, ps)
     title("Position of J1, J2");
     plot(tout,xout(:,1),"b-","LineWidth",1.5);
     plot(tout,xout(:,2),"r-","LineWidth",1.5);
+    plot(ps.t,ps.xref(:,1), "b--");
+    plot(ps.t,ps.xref(:,2), "r--");
     legend("$x_1$","$x_2$","Interpreter","latex");
     yticks([-pi -3*pi/4 -pi/2 -pi/4 0 pi/4 pi/2 3*pi/4 pi]);
     yticklabels({'-\pi','-0.75\pi','-0.5\pi','-0.25\pi','0','0.25\pi','0.5\pi','0.75\pi','\pi'});
@@ -833,6 +847,8 @@ function res = plotAngles(id, tout, xout, uout, ps)
     title("Angular velocity of J1,J2");
     plot(tout,xout(:,3),"b-","LineWidth",1.5);
     plot(tout,xout(:,4),"r-","LineWidth",1.5);
+    plot(ps.t,ps.xref(:,3), "b--");
+    plot(ps.t,ps.xref(:,4), "r--");
     legend("$\dot{x_1}$", "$\dot{x_2}$","Interpreter","latex")
 
     %plot input
@@ -909,6 +925,8 @@ function res = plotPos(id, pos, posref, ps)
     plot(pos(1,1),pos(1,2), "b*");
     xlabel("x[m]");
     ylabel("y[m]");
+    xlim([-1.7 1.7])
+    ylim([-1.7 1.7])
     title("Trajectory of robot");
     legend("Trajectory", "Reference trajectory", "Start point");
 
