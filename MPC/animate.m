@@ -11,6 +11,7 @@ function res = animate(id, pos, ps)
     grid();
     hold on;
     plot(0,0,"k*",'LineWidth',3);
+    trackline = plot(pos(1,1), pos(1,2), 'r-');
     j2plot = plot([pos(1,3) pos(1,1)],[pos(1,4) pos(1,2)], 'k*-', 'LineWidth',3);
     j1plot = plot([0 pos(1,3)],[0 pos(1,4)],'k','LineWidth',3);
     axis([-2 2 -2 2]);
@@ -28,6 +29,8 @@ function res = animate(id, pos, ps)
     filename = sprintf("gifs/%.2f_%.2f_to_%.2f_%.2f.gif", x01, x02, xf1, xf2);
 
     for i = 1:1:N
+        trackline.XData = pos(1:i,1);
+        trackline.YData = pos(1:i,2);
         j1plot.XData = [0 pos(i,3)];
         j1plot.YData = [0 pos(i,4)];
         j2plot.XData = [pos(i,3) pos(i,1)];

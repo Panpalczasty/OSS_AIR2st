@@ -12,7 +12,9 @@ function [uopt, Qstat] = MPC(ps, horizon, step)
     s_ps = ps;
     
     steps_num = ceil(ps.T/step);
-    uopt = ps.u;
+    
+    % unravelec control array for output
+    uopt = [ps.u(1:end/2) ps.u(end/2+1:end)];
 
 %     % solve for horizon (step 1)
 %     s_ps.T = horizon;
@@ -35,12 +37,12 @@ function [uopt, Qstat] = MPC(ps, horizon, step)
         Tend =  min(ps.T, (i-1)*step+horizon);
         
         s_ps.T = Tend-Tstart;
-        s_ps.xref = ps.xref(int32(Tstart*ps.sfreq)+1:int32(Tend*ps.sfreq), :);
-        s_ps.xf = ps.xref(int32(Tend*ps.sfreq), :);
+        s_ps.xref = ps.xref(int32(Tstart*ps.sfreq)+1:int32(Tend*ps.sfreq)+1, :);
+        s_ps.xf = ps.xref(int32(Tend*ps.sfreq)+1, :);
         s_ps.u = zeros(int32((Tend-Tstart)*ps.sfreq)*2, 1);
         [s_ps.A, s_ps.b] = getDefaultConstraints(s_ps);
-        
-        s_ps.u = zeros(int32((Tend-Tstart)*ps.sfreq), 2);
+      
+
         [u_fragment, ~] = fminconGrad(s_ps);
         
         u_sim = u_fragment(1:int32(step*ps.sfreq),:);

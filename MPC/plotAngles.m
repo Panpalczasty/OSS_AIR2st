@@ -14,8 +14,8 @@ function res = plotAngles(id, tout, xout, uout, ps)
     title("Position of J1, J2");
     plot(tout,xout(:,1),"b-","LineWidth",1.5);
     plot(tout,xout(:,2),"r-","LineWidth",1.5);
-    plot(ps.t,ps.xref(:,1), "b--");
-    plot(ps.t,ps.xref(:,2), "r--");
+    plot(tout,ps.xref(:,1), "b--");
+    plot(tout,ps.xref(:,2), "r--");
     legend("$x_1$","$x_2$","Interpreter","latex");
     yticks([-pi -3*pi/4 -pi/2 -pi/4 0 pi/4 pi/2 3*pi/4 pi]);
     yticklabels({'-\pi','-0.75\pi','-0.5\pi','-0.25\pi','0','0.25\pi','0.5\pi','0.75\pi','\pi'});
@@ -29,8 +29,8 @@ function res = plotAngles(id, tout, xout, uout, ps)
     title("Angular velocity of J1,J2");
     plot(tout,xout(:,3),"b-","LineWidth",1.5);
     plot(tout,xout(:,4),"r-","LineWidth",1.5);
-    plot(ps.t,ps.xref(:,3), "b--");
-    plot(ps.t,ps.xref(:,4), "r--");
+    plot(tout,ps.xref(:,3), "b--");
+    plot(tout,ps.xref(:,4), "r--");
     legend("$\dot{x_1}$", "$\dot{x_2}$","Interpreter","latex")
 
     %plot input

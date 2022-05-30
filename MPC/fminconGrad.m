@@ -5,7 +5,7 @@ function [uout,Qstat] = fminconGrad(ps)
     
     options = optimoptions('fmincon');
     options.SpecifyObjectiveGradient = true;
-    options.MaxFunctionEvaluations = 1e3;
+    options.MaxFunctionEvaluations = 1e5;
     options.Display = 'off';
     options.OptimalityTolerance = eps;
     options.StepTolerance = eps;

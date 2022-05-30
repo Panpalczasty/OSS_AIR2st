@@ -80,7 +80,7 @@ function dp = qantimodel(x, u, p, J1, J2, xref, W, R)
     df6 = [0;0;0;0;0;0];
 
     %additional dif - for cost fun SV
-    dL = [W*(x(1:end-1)-xref'); +R*u];
+    dL = [W*(x(1:end-1)-xref'); R*u];
 
     %difs of input fcn
     dg3 = dM11*u(1) + dM12*u(2);

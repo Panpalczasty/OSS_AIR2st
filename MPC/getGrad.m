@@ -18,7 +18,7 @@ function g = getGrad(u, ps)
     for i = 1: nu
         %hamiltionian simple gradient
         %g(i,:) = getHu(t,p,x,u,ps.J1,ps.J2,ps.R)/ps.sfreq;
-        g(i,1) = p(i+1,5) - p(i,5);
-        g(i,2) = p(i+1,6) - p(i,6);
+        g(i,1) = + p(i+1,5) - p(i,5);
+        g(i,2) = + p(i+1,6) - p(i,6);
     end
  end

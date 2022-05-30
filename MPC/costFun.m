@@ -7,7 +7,7 @@ function [Q,gout] = costFun(ps, u)
     Wstat = ps.Wstat;
     
     gout= zeros(length(u),1);
-    uin = zeros(length(u),2);
+    uin = zeros(length(u)/2,2);
 
     %for fmincon, unravel
     uin(:,1) = u(1:end/2);
@@ -27,6 +27,6 @@ function [Q,gout] = costFun(ps, u)
         g=getGrad(uin, ps);
 
         %for fmincon, ravel
-        gout = [g(:,1), g(:,2)];
+        gout = [g(:,1); g(:,2)];
     end
 end
