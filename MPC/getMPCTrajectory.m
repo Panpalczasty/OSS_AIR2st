@@ -48,5 +48,9 @@ switch mode
         pos(:,1) = center(1) + radius*cos(w*t) + radius/10*cos(10*w*t);
         pos(:,2) = center(2) + radius*sin(w*t) + radius/10*sin(10*w*t);
 
+    case 'agh'
+        % TODO 
+        pos(:,1) = 0;
+        pos(:,2) = 0;
 end
 end
