@@ -176,7 +176,7 @@ function dp = antimodel(x, u, p, J1, J2)
             0;
             0;];
 
-    dM22 = [0;
+    dM22  = [0;
             -2*B2*(Minv(1,2)^2 + Minv(2,2)*Minv(1,2))
             0;
             0;];

@@ -31,25 +31,3 @@ function [t, x] = inverseKin(pos, T, config, J1, J2)
         x = [x1 x2 x3 x4];
     end
 end
-
-%gradient based on fmincon - TODO
-function [uout,Qstat] = fminconGrad(ps)
-
-    Q=@(u) costFun(ps,u);
-    
-    options = optimoptions('fmincon');
-    options.SpecifyObjectiveGradient = true;
-    options.MaxFunctionEvaluations = 1e4;
-    options.Display = 'iter';
-    options.OptimalityTolerance = eps;
-    options.StepTolerance = eps;
-    options.Algorithm = 'interior-point';
-
-    uopt = fmincon(Q,ps.u,ps.A,ps.b,[],[],[],[],[],options);
-    
-    Qstat = costFun(ps, uopt);
-
-    %unravel
-    uout(:,1) = uopt(1:end/2);
-    uout(:,2) = uopt(end/2+1:end);
-end
