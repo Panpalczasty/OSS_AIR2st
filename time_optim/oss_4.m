@@ -8,7 +8,7 @@ params = getDefaultParams();
 
 params.sfreq = 50;
 
-params.x0 = [-pi/6; -pi/3; 0; 0];
+params.x0 = [-pi/2; pi/4; 0; 0];
 params.xf = [0; 0; 0; 0];
 params.u0 = [1 1];
 
@@ -58,7 +58,9 @@ plotAdjoint(1,t,p,params);
 plotAngles(2,t,x,u,params);
 plotPos(3,pos,params);
 plotSwitch(4,t,u,Hu,params);
-%plotCost(4,Qstat,params);
+plotCost(4,Qstat,params);
+
+fprintf("fig%.2f_%.2f_to_%.2f_%.2f - saved\n",params.x0(1), params.x0(2), params.xf(1), params.xf(2));
 
 animate(5,pos, params);
 
@@ -713,12 +715,7 @@ function res = plotAngles(id, tout, xout, uout, ps)
     ylim([-1.2 1.2])
     legend("$u_1$","$u_2$","Interpreter","latex")
     
-    x01 = ps.x0(1); 
-    x02 = ps.x0(2);
-    xf1 = ps.xf(1);
-    xf2 = ps.xf(2);
-    filename = sprintf("plots/state/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
-    saveas(id,filename);
+    saveToFile(id, "plots", "state", ps);
 
     res = 0;
 end
@@ -751,12 +748,7 @@ function res = plotAdjoint(id, tout, pout, ps)
     plot(tout,pout(:,4),"r--","LineWidth",1.5);
     legend("$\psi_3$", "$\psi_4$", "Interpreter","latex")
 
-    x01 = ps.x0(1); 
-    x02 = ps.x0(2);
-    xf1 = ps.xf(1);
-    xf2 = ps.xf(2);
-    filename = sprintf("plots/adj/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
-    saveas(id,filename);
+    saveToFile(id, "plots", "adj", ps);
 
     res = 0;
 end
@@ -777,12 +769,7 @@ function res = plotPos(id, pos, ps)
     title("Trajectory of robot");
     legend("Trajectory", "Start point");
 
-    x01 = ps.x0(1); 
-    x02 = ps.x0(2);
-    xf1 = ps.xf(1);
-    xf2 = ps.xf(2);
-    filename = sprintf("plots/pos/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
-    saveas(id,filename);
+    saveToFile(id, "plots", "pos", ps);
 
     res = 0;
 end
@@ -799,12 +786,7 @@ function res = plotCost(id, Qstat, ps)
     ylabel("Cost value");
     title("Cost function stats");
 
-    x01 = ps.x0(1); 
-    x02 = ps.x0(2);
-    xf1 = ps.xf(1);
-    xf2 = ps.xf(2);
-    filename = sprintf("plots/cost/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
-    saveas(id,filename);
+    saveToFile(id, "plots", "cost", ps);
  
     res = 0;
 end
@@ -838,14 +820,7 @@ function res = plotSwitch(id, tout, uout, Huout, ps)
     labels = ["$u_2$", "$\phi_2$"];
     legend(labels, "Interpreter","latex");
 
-    x01 = ps.x0(1); 
-    x02 = ps.x0(2);
-    xf1 = ps.xf(1);
-    xf2 = ps.xf(2);
-    filename = sprintf("plots/switch/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
-    saveas(id,filename);
+    saveToFile(id, "plots", "switch", ps);
  
     res = 0;
 end
-
-
