@@ -1,7 +1,7 @@
-function fig = plotError(i, t, x, xref, ps, fname)
+function fig = plotError(id, t, x, xref, ps, fname)
     
     err = abs(x(:,1:4)-xref);
-    fig = figure(i);
+    fig = figure(id);
     fig.Position = [0 0 500 500];
     
     % plot angular position error
@@ -52,6 +52,7 @@ function fig = plotError(i, t, x, xref, ps, fname)
     else
         filename = sprintf("plots/err/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
     end
-
+    
+    saveas(id,filename);
 end
 

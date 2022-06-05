@@ -29,7 +29,7 @@ function res = plotPos(id, pos, posref, ps, fname)
         filename = sprintf("plots/pos/%.2f_%.2f_to_%.2f_%.2f.png", x01, x02, xf1, xf2);
     end
     
-    %saveas(id,filename);
+    saveas(id,filename);
 
     res = 0;
 end
